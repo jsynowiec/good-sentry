@@ -1,0 +1,14 @@
+{
+  "name": "good-sentry",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jsynowiec/good-sentry"
+  },
+  "description": "Sentry broadcasting for Good process monitor",
+  "author": "Jakub Synowiec",
+  "engines": {
+    "node": ">=4.x.x"
+  },
+  "license": "MIT"
+}
