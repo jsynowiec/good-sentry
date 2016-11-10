@@ -5,9 +5,8 @@ node_js:
 - node
 deploy:
   provider: npm
-  email: npm@jakubsynowiec.info
-  api_key:
-    secure: $NPM_KEY
+  email: $NPM_EMAIL
+  api_key: $NPM_TOKEN
   skip_cleanup: true
   on:
     tags: true
