@@ -33,5 +33,9 @@
   "jest": {
     "testEnvironment": "node"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "hoek": "~4.1.0",
+    "raven": "~0.12.1"
+  }
 }
