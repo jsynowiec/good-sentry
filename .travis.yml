@@ -6,7 +6,8 @@ deploy:
   provider: npm
   email: npm@jakubsynowiec.info
   api_key:
-    secure: {{NPM_KEY}}
+    secure: $NPM_KEY
+  skip_cleanup: true
   on:
     tags: true
     repo: jsynowiec/good-sentry
