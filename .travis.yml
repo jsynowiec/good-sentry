@@ -1,12 +1,12 @@
 language: node_js
-
 node_js:
-  - "4"
-  - "node"
-
+- '4'
+- node
 deploy:
   provider: npm
   email: npm@jakubsynowiec.info
-  api_key: $NPM_TOKEN
+  api_key:
+    secure: {{NPM_KEY}}
   on:
     tags: true
+    repo: jsynowiec/good-sentry
