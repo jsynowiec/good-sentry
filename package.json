@@ -8,18 +8,25 @@
   "description": "Sentry broadcasting for Good process monitor",
   "main": "lib/index.js",
   "scripts": {
-    "clean": "rm -rf lib",
+    "clean": "rm -rf lib coverage",
+    "test": "npm run test-only",
+    "test-only": "jest --coverage",
     "prebuild": "mkdir -p lib",
     "build": "babel src/index.js --out-file lib/index.js"
   },
   "devDependencies": {
     "babel-cli": "~6.18.0",
     "babel-core": "~6.18.2",
-    "babel-preset-es2015": "~6.18.0"
+    "babel-jest": "~17.0.0",
+    "babel-preset-es2015": "~6.18.0",
+    "jest": "~17.0.0"
   },
   "author": "Jakub Synowiec",
   "engines": {
     "node": ">=4.x.x"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "license": "MIT"
 }
