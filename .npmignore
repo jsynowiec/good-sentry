@@ -1,0 +1,13 @@
+*.log
+coverage
+.vscode
+.travis.yml
+.babelrc
+.npmignore
+.editorconfig
+.eslintignore
+.eslintrc
+jsconfig.json
+src
+__tests__
+__mocks__
