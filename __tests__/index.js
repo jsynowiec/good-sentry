@@ -20,7 +20,6 @@ describe('GoodSentry', () => {
   afterEach(() => {
     raven.Client.mockClear();
     client.captureMessage.mockClear();
-    client.captureException.mockClear();
   });
 
   it('creates raven client without dsn and with default options if dsn nor options are provided', () => {
@@ -47,11 +46,11 @@ describe('GoodSentry', () => {
   it('sends each event individually', () => {
     const stream = internals.readStream();
     const reporter = new GoodSentry();
-    const logLevels = ['warning', 'info'];
+    const logLevels = ['warning', 'info', 'error'];
 
     stream.pipe(reporter);
 
-    for (let i = 0; i < 3; ++i) { // eslint-disable-line no-plusplus
+    for (let i = 0; i < logLevels.length + 1; ++i) { // eslint-disable-line no-plusplus
       stream.push({
         event: 'log',
         data: `Some message: ${i}`,
@@ -64,7 +63,7 @@ describe('GoodSentry', () => {
     return new Promise((resolve) => {
       stream.on('end', () => resolve());
     }).then(() => {
-      expect(client.captureMessage.mock.calls.length).toBe(3);
+      expect(client.captureMessage.mock.calls.length).toBe(logLevels.length + 1);
       expect(client.captureMessage.mock.calls[0][0]).toEqual('Some message: 0');
       expect(client.captureMessage.mock.calls[0][1]).toEqual({ level: 'debug', extra: { event: 'log', tags: [] } });
       expect(client.captureMessage.mock.calls[1][1]).toEqual({
@@ -81,27 +80,7 @@ describe('GoodSentry', () => {
           tags: ['info'],
         },
       });
-    });
-  });
-
-  it('sends exceptions for errors', () => {
-    const stream = internals.readStream();
-    const reporter = new GoodSentry();
-
-    stream.pipe(reporter);
-
-    stream.push({
-      event: 'log',
-      data: 'Error message',
-      tags: ['error'],
-    });
-    stream.push(null);
-
-    return new Promise((resolve) => {
-      stream.on('end', () => resolve());
-    }).then(() => {
-      expect(client.captureException.mock.calls.length).toBe(1);
-      expect(client.captureException.mock.calls[0][1]).toEqual({
+      expect(client.captureMessage.mock.calls[3][1]).toEqual({
         level: 'error',
         extra: {
           event: 'log',

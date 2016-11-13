@@ -41,11 +41,7 @@ class GoodSentry extends Stream.Writable {
       },
     };
 
-    if (extra.level === 'error') {
-      this._client.captureException(data.data, extra, () => cb());
-    } else {
-      this._client.captureMessage(data.data, extra, () => cb());
-    }
+    this._client.captureMessage(data.data, extra, () => cb());
   }
 }
 
