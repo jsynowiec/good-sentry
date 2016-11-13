@@ -1,8 +1,8 @@
 # good-sentry
 
-[Sentry](https://sentry.io) broadcasting for Good process monitor.
+[Sentry](https://sentry.io) broadcasting for [good](https://github.com/hapijs/good) process monitor.
 
-`good-sentry` is a write stream used to send event to Sentry endpoints. 
+`good-sentry` is a write stream used to send [hapi](https://github.com/hapijs/hapi) server events to a Sentry server. 
 
 [![Build Status](https://travis-ci.org/jsynowiec/good-sentry.svg?branch=master)](https://travis-ci.org/jsynowiec/good-sentry)
 [![Current Version](https://img.shields.io/npm/v/good-sentry.svg)](https://www.npmjs.com/package/good-sentry)

@@ -5,7 +5,7 @@
     "type": "git",
     "url": "git://github.com/jsynowiec/good-sentry"
   },
-  "description": "Sentry broadcasting for Good process monitor",
+  "description": "Sentry broadcasting for good process monitor",
   "keywords": [
     "hapi",
     "hapijs",
