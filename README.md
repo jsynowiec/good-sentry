@@ -19,6 +19,7 @@ Creates a new GoodSentry object with the following arguments:
     - `[logger]` - The name of the Sentry client. Defaults to ''.
     - `[release]` - The version/release of your application. Defaults to ''. Optionally set the release using `SENTRY_RELEASE` environment variable.
     - `[environment]` - The environment name of your application. Defaults to ''. Optionally set the environment using `SENTRY_ENVIRONMENT` environment variable.
+  - `[patchGlobal]` - Enable global error handler. Defaults to `false`.
 
 ### Example Usage
 

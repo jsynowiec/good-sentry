@@ -13,13 +13,16 @@ const internals = {
 };
 
 class GoodSentry extends Stream.Writable {
-  constructor({ dsn = null, config = {} } = {}) {
+  constructor({ dsn = null, config = {}, patchGlobal = false } = {}) {
     super({ objectMode: true, decodeStrings: false });
 
     const settings = hoek.applyToDefaults(internals.defaults, config);
     const args = (dsn === null) ? [settings] : [dsn, settings];
 
     this._client = new raven.Client(...args);
+    if (patchGlobal) {
+      this._client.patchGlobal();
+    }
   }
   _write(data, encoding, cb) {
     const extra = {

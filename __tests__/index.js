@@ -33,6 +33,11 @@ describe('GoodSentry', () => {
     expect(raven.Client.mock.calls[0][1]).toEqual({ environment: '', logger: '', name: hostname(), release: '' });
   });
 
+  it('creates raven cliet that captures all exceptions if patchGlobal flag is provided', () => {
+    const reporter = new GoodSentry({ patchGlobal: true }); // eslint-disable-line no-unused-vars
+    expect(raven.Client.mock.calls.length).toBe(1);
+  });
+
   it('extends options with default values', () => {
     const reporter = new GoodSentry({ config: { environment: 'production' } }); // eslint-disable-line no-unused-vars
     expect(raven.Client.mock.calls[0][0]).toEqual({

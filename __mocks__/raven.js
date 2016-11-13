@@ -9,6 +9,7 @@ const client = {
       cb();
     }
   }),
+  patchGlobal: jest.fn,
 };
 
 module.exports = {
