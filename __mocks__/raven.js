@@ -4,11 +4,6 @@ const client = {
       cb();
     }
   }),
-  captureException: jest.fn((data, extra, cb) => {
-    if (typeof cb === 'function') {
-      cb();
-    }
-  }),
   patchGlobal: jest.fn,
 };
 
