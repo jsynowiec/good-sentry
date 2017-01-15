@@ -19,7 +19,13 @@ Creates a new GoodSentry object with the following arguments:
     - `[logger]` - The name of the Sentry client. Defaults to ''.
     - `[release]` - The version/release of your application. Defaults to ''. Optionally set the release using `SENTRY_RELEASE` environment variable.
     - `[environment]` - The environment name of your application. Defaults to ''. Optionally set the environment using `SENTRY_ENVIRONMENT` environment variable.
-  - `[patchGlobal]` - Enable global error handler. Defaults to `false`.
+  - `[captureUncaught]` - Enable global error handling. Defaults to `false`.
+
+### Tags
+
+Because [Hapi tags](https://hapijs.com/tutorials/logging) are an array of strings and Sentry expects tags to be a k/v map, `good-sentry` sets all tags associated with an event to `tag: true` pairs. Those are nicely displayed in the tags section of:
+
+![Tags in Sentry](assets/sentry-issue-tags.png)
 
 ### Example Usage
 
@@ -55,11 +61,11 @@ server.register({
     options,
 }, (err) => {
   server.start(() => {
-    server.log(`Sample debug event.`);
-    server.log(['debug'], `Sample tagged debug event.`);
-    server.log(['info'], `Sample info event.`);
-    server.log(['warning', 'server'], `Sample warning event with tags.`);
-    server.log(['error', 'first-tag', 'second-tag'], `Sample error event with tags.`);
+    server.log([], 'Sample debug event.');
+    server.log(['debug'], 'Sample tagged debug event.');
+    server.log(['info'], 'Sample info event.');
+    server.log(['warning', 'server'], 'Sample warning event with tags.');
+    server.log(['error', 'first-tag', 'second-tag'], 'Sample error event with tags.');
   });
 });
 ```

@@ -9,5 +9,6 @@ coverage
 .eslintrc
 jsconfig.json
 src
+assets
 __tests__
 __mocks__
