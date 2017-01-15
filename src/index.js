@@ -1,7 +1,7 @@
 const hostname = require('os').hostname;
 const hoek = require('hoek');
 const Stream = require('stream');
-const raven = require('raven');
+const Raven = require('raven');
 
 const internals = {
   defaults: {
@@ -13,15 +13,15 @@ const internals = {
 };
 
 class GoodSentry extends Stream.Writable {
-  constructor({ dsn = null, config = {}, patchGlobal = false } = {}) {
+  constructor({ dsn = null, config = {}, captureUncaught = false } = {}) {
     super({ objectMode: true, decodeStrings: false });
 
     const settings = hoek.applyToDefaults(internals.defaults, config);
     const args = (dsn === null) ? [settings] : [dsn, settings];
 
-    this._client = new raven.Client(...args);
-    if (patchGlobal) {
-      this._client.patchGlobal();
+    this._client = Raven.config(...args);
+    if (captureUncaught) {
+      this._client.install();
     }
   }
   _write(data, encoding, cb) {
