@@ -23,7 +23,7 @@ Creates a new GoodSentry object with the following arguments:
 
 ### Tags
 
-Because [Hapi tags](https://hapijs.com/tutorials/logging) are an array of strings and Sentry expects tags to be a k/v map, `good-sentry` sets all tags associated with an event to `tag: true` pairs. Those are nicely displayed in the tags section of:
+Because [Hapi tags](https://hapijs.com/tutorials/logging) are an array of strings and Sentry expects tags to be a k/v map, `good-sentry` sets all tags associated with an event to `tag: true` pairs. Those are nicely displayed in the tags section of Sentry web interface:
 
 ![Tags in Sentry](assets/sentry-issue-tags.png)
 
@@ -51,6 +51,7 @@ const options = {
           release: version,
           environment: process.env.NODE_ENV,
         },
+        captureUncaught: true,
       }],
     }],
   },
@@ -66,6 +67,8 @@ server.register({
     server.log(['info'], 'Sample info event.');
     server.log(['warning', 'server'], 'Sample warning event with tags.');
     server.log(['error', 'first-tag', 'second-tag'], 'Sample error event with tags.');
+    
+    throw new Error('An uncaught error');
   });
 });
 ```
