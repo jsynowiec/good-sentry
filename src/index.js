@@ -46,7 +46,7 @@ class GoodSentry extends Stream.Writable {
         return 'debug';
       })(tags),
       tags: tags.filter(
-        (tag) => ['fatal', 'error', 'warning', 'info', 'debug'].includes(tag) === false,
+        (tag) => ['fatal', 'error', 'warning', 'info', 'debug'].indexOf(tag) === -1,
       ).reduce((acc, curr) => {
         acc[curr] = true;
         return acc;
