@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+
 const hostname = require('os').hostname;
 const hoek = require('hoek');
 const Stream = require('stream');
@@ -27,8 +29,10 @@ class GoodSentry extends Stream.Writable {
   _write(data, encoding, cb) {
     const extra = {
       level: ((tags = []) => {
-        tags = (typeof tags === 'string') ? [tags] : tags; // eslint-disable-line no-param-reassign
-        if (hoek.contain(tags, ['err', 'error'], { part: true })) {
+        tags = (typeof tags === 'string') ? [tags] : tags;
+        if (hoek.contain(tags, ['fatal'], { part: true })) {
+          return 'fatal';
+        } else if (hoek.contain(tags, ['err', 'error'], { part: true })) {
           return 'error';
         } else if (hoek.contain(tags, ['warn', 'warning'], { part: true })) {
           return 'warning';
