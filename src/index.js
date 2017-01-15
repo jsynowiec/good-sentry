@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+/* eslint-disable no-param-reassign, no-shadow */
 
 const hostname = require('os').hostname;
 const hoek = require('hoek');
@@ -27,9 +27,12 @@ class GoodSentry extends Stream.Writable {
     }
   }
   _write(data, encoding, cb) {
+    // Normalize event tags - if its a string then wrap in an array, default to an empty array
+    let { tags = [] } = data;
+    tags = (typeof tags === 'string') ? [tags] : tags;
+
     const additionalData = {
       level: ((tags = []) => {
-        tags = (typeof tags === 'string') ? [tags] : tags;
         if (hoek.contain(tags, ['fatal'], { part: true })) {
           return 'fatal';
         } else if (hoek.contain(tags, ['err', 'error'], { part: true })) {
@@ -41,19 +44,13 @@ class GoodSentry extends Stream.Writable {
         }
 
         return 'debug';
-      })(data.tags),
-      tags: ((tags = []) => tags.filter(
-        (tag) => [
-          'fatal',
-          'error',
-          'warning',
-          'info',
-          'debug',
-        ].includes(tag) === false,
+      })(tags),
+      tags: tags.filter(
+        (tag) => ['fatal', 'error', 'warning', 'info', 'debug'].includes(tag) === false,
       ).reduce((acc, curr) => {
         acc[curr] = true;
         return acc;
-      }, {}))(data.tags),
+      }, {}),
       extra: {
         event: data.event,
       },
