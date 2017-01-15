@@ -27,7 +27,7 @@ class GoodSentry extends Stream.Writable {
     }
   }
   _write(data, encoding, cb) {
-    const extra = {
+    const additionalData = {
       level: ((tags = []) => {
         tags = (typeof tags === 'string') ? [tags] : tags;
         if (hoek.contain(tags, ['fatal'], { part: true })) {
@@ -42,13 +42,24 @@ class GoodSentry extends Stream.Writable {
 
         return 'debug';
       })(data.tags),
+      tags: ((tags = []) => tags.filter(
+        (tag) => [
+          'fatal',
+          'error',
+          'warning',
+          'info',
+          'debug',
+        ].includes(tag) === false,
+      ).reduce((acc, curr) => {
+        acc[curr] = true;
+        return acc;
+      }, {}))(data.tags),
       extra: {
         event: data.event,
-        tags: data.tags || [],
       },
     };
 
-    this._client.captureMessage(data.data, extra, () => cb());
+    this._client.captureMessage(data.data, additionalData, () => cb());
   }
 }
 
