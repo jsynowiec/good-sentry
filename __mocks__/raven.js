@@ -4,9 +4,10 @@ const client = {
       cb();
     }
   }),
-  patchGlobal: jest.fn,
+  install: jest.fn(),
 };
 
 module.exports = {
-  Client: jest.fn(() => client),
+  config: jest.fn(() => client),
+  install: client.install,
 };

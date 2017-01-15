@@ -1,9 +1,9 @@
-jest.mock('raven');
-
 const GoodSentry = require('../src/index');
 const hostname = require('os').hostname;
 const Stream = require('stream');
 const raven = require('raven');
+
+jest.mock('raven');
 
 const internals = {
   readStream() {
@@ -13,34 +13,36 @@ const internals = {
   },
 };
 
-const client = new raven.Client();
-raven.Client.mockClear();
+const client = raven.config();
+raven.config.mockClear();
 
 describe('GoodSentry', () => {
   afterEach(() => {
-    raven.Client.mockClear();
+    raven.config.mockClear();
+    raven.install.mockClear();
     client.captureMessage.mockClear();
   });
 
   it('creates raven client without dsn and with default options if dsn nor options are provided', () => {
     const reporter = new GoodSentry(); // eslint-disable-line no-unused-vars
-    expect(raven.Client.mock.calls[0][0]).toEqual({ environment: '', logger: '', name: hostname(), release: '' });
+    expect(raven.config.mock.calls[0][0]).toEqual({ environment: '', logger: '', name: hostname(), release: '' });
   });
 
   it('creates raven client with dsn if provided', () => {
     const reporter = new GoodSentry({ dsn: 'https://<key>@sentry.io/<project>' }); // eslint-disable-line no-unused-vars
-    expect(raven.Client.mock.calls[0][0]).toBe('https://<key>@sentry.io/<project>');
-    expect(raven.Client.mock.calls[0][1]).toEqual({ environment: '', logger: '', name: hostname(), release: '' });
+    expect(raven.config.mock.calls[0][0]).toBe('https://<key>@sentry.io/<project>');
+    expect(raven.config.mock.calls[0][1]).toEqual({ environment: '', logger: '', name: hostname(), release: '' });
   });
 
-  it('creates raven cliet that captures all exceptions if patchGlobal flag is provided', () => {
-    const reporter = new GoodSentry({ patchGlobal: true }); // eslint-disable-line no-unused-vars
-    expect(raven.Client.mock.calls.length).toBe(1);
+  it('creates raven client that captures all exceptions if captureUncaught flag is provided', () => {
+    const reporter = new GoodSentry({ captureUncaught: true }); // eslint-disable-line no-unused-vars
+    expect(raven.config.mock.calls.length).toBe(1);
+    expect(raven.install.mock.calls.length).toBe(1);
   });
 
   it('extends options with default values', () => {
     const reporter = new GoodSentry({ config: { environment: 'production' } }); // eslint-disable-line no-unused-vars
-    expect(raven.Client.mock.calls[0][0]).toEqual({
+    expect(raven.config.mock.calls[0][0]).toEqual({
       environment: 'production',
       logger: '',
       name: hostname(),
@@ -51,7 +53,9 @@ describe('GoodSentry', () => {
   it('sends each event individually', () => {
     const stream = internals.readStream();
     const reporter = new GoodSentry();
-    const logLevels = ['warning', 'info', 'error'];
+    const logLevels = ['warning', 'info', 'error', 'fatal'];
+    const tags = ['database', 'query'];
+    const tagMap = { database: true, query: true };
 
     stream.pipe(reporter);
 
@@ -59,7 +63,7 @@ describe('GoodSentry', () => {
       stream.push({
         event: 'log',
         data: `Some message: ${i}`,
-        tags: (i > 0) ? [logLevels[i - 1]] : '',
+        tags: (i > 0) ? [logLevels[i - 1], ...tags] : tags,
       });
     }
 
@@ -70,27 +74,36 @@ describe('GoodSentry', () => {
     }).then(() => {
       expect(client.captureMessage.mock.calls.length).toBe(logLevels.length + 1);
       expect(client.captureMessage.mock.calls[0][0]).toEqual('Some message: 0');
-      expect(client.captureMessage.mock.calls[0][1]).toEqual({ level: 'debug', extra: { event: 'log', tags: [] } });
+      expect(client.captureMessage.mock.calls[0][1]).toEqual({
+        level: 'debug',
+        extra: {
+          event: 'log',
+        },
+        tags: tagMap,
+      });
+
       expect(client.captureMessage.mock.calls[1][1]).toEqual({
         level: 'warning',
         extra: {
           event: 'log',
-          tags: ['warning'],
         },
+        tags: tagMap,
       });
+
       expect(client.captureMessage.mock.calls[2][1]).toEqual({
         level: 'info',
         extra: {
           event: 'log',
-          tags: ['info'],
         },
+        tags: tagMap,
       });
+
       expect(client.captureMessage.mock.calls[3][1]).toEqual({
         level: 'error',
         extra: {
           event: 'log',
-          tags: ['error'],
         },
+        tags: tagMap,
       });
     });
   });
