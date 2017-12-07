@@ -23,7 +23,7 @@
     "test-only": "jest --coverage",
     "prebuild": "mkdir -p lib",
     "build": "babel src/index.js --out-file lib/index.js",
-    "prepublish": "npm run build"
+    "prepare": "npm run build"
   },
   "devDependencies": {
     "babel-cli": "~6.24.1",
