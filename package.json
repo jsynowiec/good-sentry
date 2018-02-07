@@ -1,6 +1,6 @@
 {
   "name": "good-sentry",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "repository": {
     "type": "git",
     "url": "git://github.com/jsynowiec/good-sentry"
@@ -21,9 +21,9 @@
     "pretest": "npm run lint",
     "test": "npm run test-only",
     "test-only": "jest --coverage",
-    "prebuild": "npm run clean  && mkdir -p lib",
+    "prebuild": "mkdir -p lib",
     "build": "babel src/index.js --out-file lib/index.js",
-    "prepublishOnly": "npm run test && npm run build"
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "babel-cli": "~6.24.1",
