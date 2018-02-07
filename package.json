@@ -21,9 +21,9 @@
     "pretest": "npm run lint",
     "test": "npm run test-only",
     "test-only": "jest --coverage",
-    "prebuild": "mkdir -p lib",
+    "prebuild": "npm run clean  && mkdir -p lib",
     "build": "babel src/index.js --out-file lib/index.js",
-    "prepare": "npm run build"
+    "prepublishOnly": "npm run test && npm run build"
   },
   "devDependencies": {
     "babel-cli": "~6.24.1",
