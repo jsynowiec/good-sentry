@@ -68,7 +68,10 @@ server.register({
     server.log(['warning', 'server'], 'Sample warning event with tags.');
     server.log(['error', 'first-tag', 'second-tag'], 'Sample error event with tags.');
     
-    throw new Error('An uncaught error');
+    // Throw an error after 5 seconds
+    setTimeout(() => {
+      throw new Error('An uncaught error');
+    }, 5000);
   });
 });
 ```
