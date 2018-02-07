@@ -45,7 +45,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "hoek": "^4.2.0",
-    "raven": "~2.2.1"
+    "hoek": "~4.2.0",
   }
 }
