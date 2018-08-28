@@ -19,7 +19,7 @@ class GoodSentry extends Stream.Writable {
     super({ objectMode: true, decodeStrings: false });
 
     const settings = hoek.applyToDefaults(internals.defaults, config);
-    const args = (dsn === null) ? [settings] : [dsn, settings];
+    const args = dsn === null ? [settings] : [dsn, settings];
 
     this._client = Raven.config(...args);
     if (captureUncaught) {
@@ -29,7 +29,7 @@ class GoodSentry extends Stream.Writable {
   _write(data, encoding, cb) {
     // Normalize event tags - if its a string then wrap in an array, default to an empty array
     let { tags = [] } = data;
-    tags = (typeof tags === 'string') ? [tags] : tags;
+    tags = typeof tags === 'string' ? [tags] : tags;
 
     const additionalData = {
       level: ((tags = []) => {
@@ -45,12 +45,15 @@ class GoodSentry extends Stream.Writable {
 
         return 'debug';
       })(tags),
-      tags: tags.filter(
-        (tag) => ['fatal', 'error', 'warning', 'info', 'debug'].indexOf(tag) === -1,
-      ).reduce((acc, curr) => {
-        acc[curr] = true;
-        return acc;
-      }, {}),
+      tags: tags
+        .filter(
+          tag =>
+            ['fatal', 'error', 'warning', 'info', 'debug'].indexOf(tag) === -1,
+        )
+        .reduce((acc, curr) => {
+          acc[curr] = true;
+          return acc;
+        }, {}),
       extra: {
         event: data.event,
       },
