@@ -48,6 +48,6 @@
   "license": "MIT",
   "dependencies": {
     "hoek": "~5.0.4",
-    "raven": "~2.4.0"
+    "raven": "~2.6.3"
   }
 }
