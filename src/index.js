@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign, no-shadow */
 
-const hostname = require('os').hostname;
+const { hostname } = require('os');
 const hoek = require('hoek');
 const Stream = require('stream');
 const Raven = require('raven');
@@ -26,6 +26,7 @@ class GoodSentry extends Stream.Writable {
       this._client.install();
     }
   }
+
   _write(data, encoding, cb) {
     // Normalize event tags - if its a string then wrap in an array, default to an empty array
     let { tags = [] } = data;
@@ -35,11 +36,14 @@ class GoodSentry extends Stream.Writable {
       level: ((tags = []) => {
         if (hoek.contain(tags, ['fatal'], { part: true })) {
           return 'fatal';
-        } else if (hoek.contain(tags, ['err', 'error'], { part: true })) {
+        }
+        if (hoek.contain(tags, ['err', 'error'], { part: true })) {
           return 'error';
-        } else if (hoek.contain(tags, ['warn', 'warning'], { part: true })) {
+        }
+        if (hoek.contain(tags, ['warn', 'warning'], { part: true })) {
           return 'warning';
-        } else if (hoek.contain(tags, ['info'], { part: true })) {
+        }
+        if (hoek.contain(tags, ['info'], { part: true })) {
           return 'info';
         }
 

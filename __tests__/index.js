@@ -1,7 +1,8 @@
-const GoodSentry = require('../src/index');
-const hostname = require('os').hostname;
+const { hostname } = require('os');
 const Stream = require('stream');
 const raven = require('raven');
+
+const GoodSentry = require('../src/index');
 
 jest.mock('raven');
 
@@ -24,14 +25,30 @@ describe('GoodSentry', () => {
   });
 
   it('creates raven client without dsn and with default options if dsn nor options are provided', () => {
-    const reporter = new GoodSentry(); // eslint-disable-line no-unused-vars
-    expect(raven.config.mock.calls[0][0]).toEqual({ environment: '', logger: '', name: hostname(), release: '' });
+    // eslint-disable-next-line no-unused-vars
+    const reporter = new GoodSentry();
+    expect(raven.config.mock.calls[0][0]).toEqual({
+      environment: '',
+      logger: '',
+      name: hostname(),
+      release: '',
+    });
   });
 
   it('creates raven client with dsn if provided', () => {
-    const reporter = new GoodSentry({ dsn: 'https://<key>@sentry.io/<project>' }); // eslint-disable-line no-unused-vars
-    expect(raven.config.mock.calls[0][0]).toBe('https://<key>@sentry.io/<project>');
-    expect(raven.config.mock.calls[0][1]).toEqual({ environment: '', logger: '', name: hostname(), release: '' });
+    // eslint-disable-next-line no-unused-vars
+    const reporter = new GoodSentry({
+      dsn: 'https://<key>@sentry.io/<project>',
+    });
+    expect(raven.config.mock.calls[0][0]).toBe(
+      'https://<key>@sentry.io/<project>',
+    );
+    expect(raven.config.mock.calls[0][1]).toEqual({
+      environment: '',
+      logger: '',
+      name: hostname(),
+      release: '',
+    });
   });
 
   it('creates raven client that captures all exceptions if captureUncaught flag is provided', () => {
@@ -59,20 +76,23 @@ describe('GoodSentry', () => {
 
     stream.pipe(reporter);
 
-    for (let i = 0; i < logLevels.length + 1; ++i) { // eslint-disable-line no-plusplus
+    for (let i = 0; i < logLevels.length + 1; ++i) {
+      // eslint-disable-line no-plusplus
       stream.push({
         event: 'log',
         data: `Some message: ${i}`,
-        tags: (i > 0) ? [logLevels[i - 1], ...tags] : tags,
+        tags: i > 0 ? [logLevels[i - 1], ...tags] : tags,
       });
     }
 
     stream.push(null);
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       stream.on('end', () => resolve());
     }).then(() => {
-      expect(client.captureMessage.mock.calls.length).toBe(logLevels.length + 1);
+      expect(client.captureMessage.mock.calls.length).toBe(
+        logLevels.length + 1,
+      );
       expect(client.captureMessage.mock.calls[0][0]).toEqual('Some message: 0');
       expect(client.captureMessage.mock.calls[0][1]).toEqual({
         level: 'debug',
