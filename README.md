@@ -4,8 +4,11 @@
 
 `good-sentry` is a write stream used to send [hapi](https://github.com/hapijs/hapi) server events to a Sentry server. 
 
-[![Build Status](https://travis-ci.org/jsynowiec/good-sentry.svg?branch=master)](https://travis-ci.org/jsynowiec/good-sentry)
 [![Current Version](https://img.shields.io/npm/v/good-sentry.svg)](https://www.npmjs.com/package/good-sentry)
+[![Build Status](https://travis-ci.org/jsynowiec/good-sentry.svg?branch=master)](https://travis-ci.org/jsynowiec/good-sentry)
+[![License][badge-license]][license]
+
+[![Donate][badge-donate]][donate]
 
 ## Usage
 ### `new GoodSentry ([options])`
@@ -79,4 +82,7 @@ server.register({
 This example sets up the reporter named mySentryReporter to listen for server events and send them to a Sentry project with additional settings.
 
 ## License
-MIT License. See the [LICENSE](https://github.com/jsynowiec/good-sentry/blob/master/LICENSE) file.
+Released under the [MIT license](https://github.com/jsynowiec/good-sentry/blob/master/LICENSE).
+
+[donate]: https://ko-fi.com/X8X8N42K
+[badge-donate]: https://img.shields.io/badge/☕-buy%20me%20a%20coffee-46b798.svg
