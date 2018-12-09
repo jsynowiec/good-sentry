@@ -82,7 +82,10 @@ server.register({
 This example sets up the reporter named mySentryReporter to listen for server events and send them to a Sentry project with additional settings.
 
 ## License
-Released under the [MIT license](https://github.com/jsynowiec/good-sentry/blob/master/LICENSE).
+Released under the [MIT license][license].
 
 [donate]: https://ko-fi.com/X8X8N42K
+[license]: https://raw.githubusercontent.com/jsynowiec/good-sentry/master/LICENSE
+
+[badge-license]: https://img.shields.io/github/license/jsynowiec/good-sentry.svg
 [badge-donate]: https://img.shields.io/badge/☕-buy%20me%20a%20coffee-46b798.svg
