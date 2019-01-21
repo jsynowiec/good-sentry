@@ -22,6 +22,7 @@ describe('GoodSentry', () => {
     raven.config.mockClear();
     raven.install.mockClear();
     client.captureMessage.mockClear();
+    client.captureException.mockClear();
   });
 
   it('creates raven client without dsn and with default options if dsn nor options are provided', () => {
@@ -124,6 +125,59 @@ describe('GoodSentry', () => {
           event: 'log',
         },
         tags: tagMap,
+      });
+
+      expect(client.captureException.mock.calls.length).toBe(0);
+    });
+  });
+
+  it('sends each event individually', () => {
+    const stream = internals.readStream();
+    const reporter = new GoodSentry();
+
+    stream.pipe(reporter);
+
+    const error = new Error('Mocked error');
+
+    const events = [
+      { error, tags: ['error', 'application'] },
+      { data: { error, user: 'doe' }, tags: ['error', 'application'] }
+    ];
+
+    for (let i = 0; i < events.length; ++i) {
+      // eslint-disable-line no-plusplus
+      stream.push(Object.assign({
+        event: 'log'
+      }, events[i]));
+    }
+
+    stream.push(null);
+
+    return new Promise(resolve => {
+      stream.on('end', () => resolve());
+    }).then(() => {
+      expect(client.captureMessage.mock.calls.length).toBe(0);
+      expect(client.captureException.mock.calls.length).toBe(
+        events.length
+      );
+
+      expect(client.captureException.mock.calls[0][0]).toBe(error);
+      expect(client.captureException.mock.calls[0][1]).toEqual({
+        level: 'error',
+        extra: {
+          event: 'log',
+        },
+        tags: { application: true },
+      });
+
+      expect(client.captureException.mock.calls[1][0]).toBe(error);
+      expect(client.captureException.mock.calls[1][1]).toEqual({
+        level: 'error',
+        extra: {
+          event: 'log',
+          user: 'doe',
+        },
+        tags: { application: true },
       });
     });
   });
