@@ -141,7 +141,8 @@ describe('GoodSentry', () => {
 
     const events = [
       { error, tags: ['error', 'application'] },
-      { data: { error, user: 'doe' }, tags: ['error', 'application'] }
+      { data: { error, user: 'doe' }, tags: ['error', 'application'] },
+      { data: { err: error }, tags: ['error', 'application'] }
     ];
 
     for (let i = 0; i < events.length; ++i) {
@@ -176,6 +177,15 @@ describe('GoodSentry', () => {
         extra: {
           event: 'log',
           user: 'doe',
+        },
+        tags: { application: true },
+      });
+
+      expect(client.captureException.mock.calls[2][0]).toBe(error);
+      expect(client.captureException.mock.calls[2][1]).toEqual({
+        level: 'error',
+        extra: {
+          event: 'log'
         },
         tags: { application: true },
       });
