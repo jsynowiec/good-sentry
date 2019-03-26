@@ -84,7 +84,7 @@ This example sets up the reporter named mySentryReporter to listen for server ev
 ## License
 Released under the [MIT license][license].
 
-[donate]: https://ko-fi.com/X8X8N42K
+[donate]: https://paypal.me/jaqb/5eur
 [license]: https://raw.githubusercontent.com/jsynowiec/good-sentry/master/LICENSE
 
 [badge-license]: https://img.shields.io/github/license/jsynowiec/good-sentry.svg
