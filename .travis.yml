@@ -1,7 +1,7 @@
 language: node_js
 node_js:
-  - '8'
   - '10'
+  - '12'
   - node
 before_deploy:
   - 'npm run build'
@@ -13,4 +13,4 @@ deploy:
   on:
     tags: true
     repo: jsynowiec/good-sentry
-    node: '10'
+    node: '12'
