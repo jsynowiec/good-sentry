@@ -8,8 +8,6 @@
 [![Build Status](https://travis-ci.org/jsynowiec/good-sentry.svg?branch=master)](https://travis-ci.org/jsynowiec/good-sentry)
 [![License][badge-license]][license]
 
-[![Donate][badge-donate]][donate]
-
 ## Usage
 ### `new GoodSentry ([options])`
 
@@ -84,8 +82,5 @@ This example sets up the reporter named mySentryReporter to listen for server ev
 ## License
 Released under the [MIT license][license].
 
-[donate]: https://paypal.me/jaqb/5eur
 [license]: https://raw.githubusercontent.com/jsynowiec/good-sentry/master/LICENSE
-
 [badge-license]: https://img.shields.io/github/license/jsynowiec/good-sentry.svg
-[badge-donate]: https://img.shields.io/badge/☕-buy%20me%20a%20coffee-46b798.svg
