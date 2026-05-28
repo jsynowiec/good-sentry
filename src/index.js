@@ -23,9 +23,8 @@ class GoodSentry extends Writable {
           (i) => !i.name || !['OnUncaughtException', 'OnUnhandledRejection'].includes(i.name),
         );
     }
-    // Sentry.init() installs global handlers by default.
-    // Previously with raven, captureUncaught opt-ed IN to install().
-    // Here it opt-s OUT by removing those integrations.
+    // captureUncaught=false filters OUT uncaught exception/rejection integrations
+    // (Sentry.init() installs them by default; raven's install() opted IN)
     Sentry.init(sentryOptions);
   }
 
