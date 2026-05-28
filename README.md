@@ -1,5 +1,9 @@
 # good-sentry
 
+[![Sponsor][sponsor-badge]][sponsor]
+[![License][license-badge]][license]
+![NPM Version][npm-version-badge]
+
 [Sentry](https://sentry.io) broadcasting for [good](https://github.com/hapijs/good) process monitor.
 
 `good-sentry` is a write stream used to send [hapi](https://github.com/hapijs/hapi) server events to a Sentry server.
@@ -74,3 +78,9 @@ server.register({ register: require('good'), options }, (err) => {
 ## License
 
 Released under the MIT license.
+
+[license-badge]: https://img.shields.io/github/license/jsynowiec/good-sentry.svg
+[license]: https://github.com/jsynowiec/good-sentry/blob/master/LICENSE
+[sponsor-badge]: https://img.shields.io/badge/♥-Sponsor-fc0fb5.svg
+[sponsor]: https://github.com/sponsors/jsynowiec
+[npm-version-badge]: https://img.shields.io/npm/v/good-sentry
