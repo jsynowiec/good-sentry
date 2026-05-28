@@ -25,6 +25,9 @@ class GoodSentry extends Writable {
                         !['OnUncaughtException', 'OnUnhandledRejection'].includes(i.name),
                 );
         }
+        // Sentry.init() installs global handlers by default.
+        // Previously with raven, captureUncaught opt-ed IN to install().
+        // Here it opt-s OUT by removing those integrations.
         Sentry.init(sentryOptions);
     }
 
@@ -32,15 +35,13 @@ class GoodSentry extends Writable {
         let { tags = [] } = data;
         tags = typeof tags === 'string' ? [tags] : tags;
 
-        const level = (() => {
-            if (['fatal'].some((v) => tags.includes(v))) return 'fatal';
-            if (['err', 'error'].some((v) => tags.includes(v))) return 'error';
-            if (['warn', 'warning'].some((v) => tags.includes(v))) return 'warning';
-            if (['info'].some((v) => tags.includes(v))) return 'info';
-            return 'debug';
-        })();
+        let level = 'debug';
+        if (tags.includes('warn') || tags.includes('warning')) level = 'warning';
+        else if (tags.includes('err') || tags.includes('error')) level = 'error';
+        else if (tags.includes('fatal')) level = 'fatal';
+        else if (tags.includes('info')) level = 'info';
 
-        const sentis = tags
+        const customTags = tags
             .filter((t) => !['fatal', 'error', 'warning', 'info', 'debug'].includes(t))
             .reduce((acc, curr) => {
                 acc[curr] = true;
@@ -49,7 +50,7 @@ class GoodSentry extends Writable {
 
         Sentry.captureMessage(data.data, {
             level,
-            tags: sentis,
+            tags: customTags,
             extra: { event: data.event },
         });
         cb();
