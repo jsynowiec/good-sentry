@@ -1,5 +1,5 @@
 export default {
-    coverageDirectory: 'coverage',
-    testEnvironment: 'node',
-    transform: {},
+  coverageDirectory: 'coverage',
+  testEnvironment: 'node',
+  transform: {},
 };
