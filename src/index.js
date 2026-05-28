@@ -34,9 +34,9 @@ class GoodSentry extends Writable {
     tags = typeof tags === 'string' ? [tags] : tags;
 
     let level = 'debug';
-    if (tags.includes('warn') || tags.includes('warning')) level = 'warning';
+    if (tags.includes('fatal')) level = 'fatal';
     else if (tags.includes('err') || tags.includes('error')) level = 'error';
-    else if (tags.includes('fatal')) level = 'fatal';
+    else if (tags.includes('warn') || tags.includes('warning')) level = 'warning';
     else if (tags.includes('info')) level = 'info';
 
     const customTags = tags
