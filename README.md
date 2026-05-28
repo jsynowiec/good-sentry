@@ -11,13 +11,13 @@
 Creates a new GoodSentry object with the following arguments:
 
 - `[options]` - optional configuration object with the following keys
-    - `[dsn]` - Sentry project's Data Source Name. Defaults to `null`.
-    - `[config]` - optional configuration object with the following keys
-        - `[name]` - The name of the logger used by Sentry. Defaults to hostname.
-        - `[logger]` - The name of the Sentry client. Defaults to `''`.
-        - `[release]` - The version/release of your application. Defaults to `''`.
-        - `[environment]` - The environment name of your application. Defaults to `''`.
-    - `[captureUncaught]` - Enable global error handling. Defaults to `false`.
+  - `[dsn]` - Sentry project's Data Source Name. Defaults to `null`.
+  - `[config]` - optional configuration object with the following keys
+    - `[name]` - The name of the logger used by Sentry. Defaults to hostname.
+    - `[logger]` - The name of the Sentry client. Defaults to `''`.
+    - `[release]` - The version/release of your application. Defaults to `''`.
+    - `[environment]` - The environment name of your application. Defaults to `''`.
+  - `[captureUncaught]` - Enable global error handling. Defaults to `false`.
 
 **Note:** `@sentry/node` uses a global singleton. Multiple `GoodSentry` instances with different DSNs are **not supported** — only the first `Sentry.init()` call takes effect.
 
@@ -34,40 +34,40 @@ const server = new Hapi.Server();
 server.connection();
 
 const options = {
-    reporters: {
-        mySentryReporter: [
-            {
-                module: 'good-squeeze',
-                name: 'Squeeze',
-                args: [{ log: '*' }],
+  reporters: {
+    mySentryReporter: [
+      {
+        module: 'good-squeeze',
+        name: 'Squeeze',
+        args: [{ log: '*' }],
+      },
+      {
+        module: 'good-sentry',
+        args: [
+          {
+            dsn: 'https://<key>:<secret>@sentry.io/<project>',
+            config: {
+              name: 'myAwesomeHapiServer',
+              logger: 'mySentryReporter',
+              release: version,
+              environment: process.env.NODE_ENV,
             },
-            {
-                module: 'good-sentry',
-                args: [
-                    {
-                        dsn: 'https://<key>:<secret>@sentry.io/<project>',
-                        config: {
-                            name: 'myAwesomeHapiServer',
-                            logger: 'mySentryReporter',
-                            release: version,
-                            environment: process.env.NODE_ENV,
-                        },
-                        captureUncaught: true,
-                    },
-                ],
-            },
+            captureUncaught: true,
+          },
         ],
-    },
+      },
+    ],
+  },
 };
 
 server.register({ register: require('good'), options }, (err) => {
-    server.start(() => {
-        server.log([], 'Sample debug event.');
-        server.log(['debug'], 'Sample tagged debug event.');
-        server.log(['info'], 'Sample info event.');
-        server.log(['warning', 'server'], 'Sample warning event with tags.');
-        server.log(['error', 'first-tag', 'second-tag'], 'Sample error event with tags.');
-    });
+  server.start(() => {
+    server.log([], 'Sample debug event.');
+    server.log(['debug'], 'Sample tagged debug event.');
+    server.log(['info'], 'Sample info event.');
+    server.log(['warning', 'server'], 'Sample warning event with tags.');
+    server.log(['error', 'first-tag', 'second-tag'], 'Sample error event with tags.');
+  });
 });
 ```
 
